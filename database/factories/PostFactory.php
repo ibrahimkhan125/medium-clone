@@ -18,13 +18,13 @@ class PostFactory extends Factory
      */
     public function definition(): array
     {
-        $title = $this->faker->sentence;
+        $title = fake()->sentence();
         return [
-            'image' => $this->faker->imageUrl(),
+            'image' => fake()->imageUrl(),
             'title' => $title,
             'slug' => Str::slug($title),
-            'context' => $this->faker->paragraph(5),
-            'category_id' => Category::inRandomOrder()->first(),
+            'content' => fake()->paragraph(5),
+            'category_id' => Category::inRandomOrder()->first()->id,
             'user_id' => 1,
             'published_at' => fake()->optional()->dateTime() 
         ];
