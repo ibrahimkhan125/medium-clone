@@ -9,12 +9,28 @@
                     <img src="{{$post->user->imageUrl()}}" alt="{{$post->user->name}}"
                         class="w-12 h-12 rounded-full inline-block">
                     <div>
-
-                        <p class="text-gray-600">
-                            By <span class="font-semibold">{{ $post->user->name }}</span>
-                            &middot;
-                            <a href="#" class="text-emerald-500">Follow</a>
-                        </p>
+                        <div class="flex">
+                            <p class="text-gray-600">
+                                By <span class="font-semibold">
+                                    <a class="hover:underline"
+                                        href="{{ route('profile.show', $post->user) }}">{{ $post->user->name }}</a>
+                                </span>
+                                &middot;&nbsp;
+                                <div
+                                    x-data="followersTracker(
+                                        {{ $post->user->id }},
+                                        {{ $post->user->followers->count() }},
+                                        {{ $post->user->isFollowedBy(Auth::user()) ? 'true' : 'false' }})"
+                                >
+                                    <a
+                                        class="cursor-pointer"
+                                        :class="following ? 'text-red-500 hover:text-red-700' : 'text-green-500 hover:text-green-700' "
+                                        x-text="following ? 'Unfollow' : 'Follow' " @click="follow()"
+                                        >
+                                    </a>
+                                </div>
+                            </p>
+                        </div>
                         <p class="text-gray-500 text-sm">
                             {{$post->readTimeEstimation()}} min read &middot;
                             {{$post->postCreatedAt()}}

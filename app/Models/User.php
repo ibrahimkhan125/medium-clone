@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Post;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -53,5 +54,19 @@ class User extends Authenticatable implements MustVerifyEmail
     public function imageUrl(): string
     {
         return $this->image ? Storage::url($this->image) : 'https://ui-avatars.com/api/?name=' . $this->name . '&color=7F9CF5&background=EBF4FF';
+    }
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
+    }
+    public function following(){
+        return $this->belongsToMany(User::class, 'followers','follower_id', 'user_id');
+    }
+    public function followers(){
+        return $this->belongsToMany(User::class, 'followers','user_id', 'follower_id');
+    }
+    public function isFollowedBy(User $user): bool
+    {
+        return $this->followers()->where('follower_id', $user->id)->exists();
     }
 }
