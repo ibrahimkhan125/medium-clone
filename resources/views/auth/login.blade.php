@@ -4,7 +4,7 @@
 
     <form method="POST" action="{{ route('login') }}">
         @csrf
-
+        <x-input-error :messages="$errors->get('suspended')" class="my-2" />
         <!-- Email Address -->
         <div>
             <x-input-label for="email" :value="__('Email')" />
@@ -44,4 +44,12 @@
             </x-primary-button>
         </div>
     </form>
+    <div class="flex flex-col items-center">
+        <h3 class="font-bold text-xl my-4">OR</h3>
+        <a href="{{ route('google.redirect') }}" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+            <x-primary-button class="ms-3">
+                {{ __('Log in with Google') }}
+            </x-primary-button>
+        </a>
+    </div>
 </x-guest-layout>

@@ -9,6 +9,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Post;
+use Str;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -26,7 +27,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'image',
         'bio',
         'email',
-        'password',
+        'password'
     ];
 
     /**
@@ -68,5 +69,19 @@ class User extends Authenticatable implements MustVerifyEmail
     public function isFollowedBy(User $user): bool
     {
         return $this->followers()->where('follower_id', $user->id)->exists();
+    }
+    public static function generateUniqueUsername(string $name): string
+    {
+        $base = Str::slug($name);
+        $username = $base;
+        $counter = 1;
+
+        // Keep checking until we find a unique username
+        while (User::where('username', $username)->exists()) {
+            $username = "{$base}-{$counter}";
+            $counter++;
+        }
+
+        return $username;
     }
 }

@@ -6,6 +6,7 @@ use App\Http\Requests\PostRequest;
 use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\Post;
+use Illuminate\Support\Facades\Auth;
 use Str;
 
 class PostController extends Controller
@@ -42,6 +43,8 @@ class PostController extends Controller
         $data['user_id'] = auth()->id();
 
         $post = Post::create($data);
+        // dd($post);
+        event(new \App\Events\ArticlePublished($post));
         return redirect()->route('dashboard')->with('success', 'Post created successfully.');
 // dd($request->all());
         // $post = Post::create($request->all());
