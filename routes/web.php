@@ -58,17 +58,6 @@ Route::get('/google/auth/callback', function () {
     $user->google_refresh_token = $google_user->refreshToken;
     $user->image = $google_user->avatar;
     $user->save();
-    // User::updateOrCreate([
-    //     'email' => $google_user->email,
-    // ], [
-    //     'name' => $google_user->name,
-    //     'username' => User::generateUniqueUsername($google_user->name),
-    //     'password' => 'password',
-    //     'email_verified_at' => now(),
-    //     'google_token' => $google_user->token,
-    //     'google_refresh_token' => $google_user->refreshToken,
-    //     'image' => $google_user->avatar,
-    // ]);
     Auth::login($user);
     return redirect('/');
 });
