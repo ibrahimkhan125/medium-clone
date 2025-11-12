@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\PostRequest;
+use App\Models\Player;
 use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\Post;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Str;
 
 class PostController extends Controller
@@ -17,6 +19,15 @@ class PostController extends Controller
     public function index()
     {
 
+        // dd('here');
+        // $favPlayer = DB::table('players as p')
+        //     ->join('teams as t', 't.id', '=', 'p.team_id')
+        //     ->leftJoin('players as fp', 'fp.id', '=', 'p.favorite_player')
+        //     ->select('p.player_name', 't.team_name',
+        //     'fp.player_name as fav_player_name')
+        //     ->get();
+
+        //     dd($favPlayer);
         $posts = Post::latest()->paginate(7);
         return view("post.index", compact("posts"));
     }

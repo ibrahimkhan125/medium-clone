@@ -3,6 +3,8 @@
 use App\Http\Controllers\FollowerController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\ClapController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\CheckSuspended;
 use Laravel\Socialite\Facades\Socialite;
@@ -20,7 +22,7 @@ Route::middleware(['auth', 'verified', CheckSuspended::class])->group(function (
         Route::post('/post/store','store')->name('post.store');
     });
     Route::post('/follow/{user}',[FollowerController::class, 'followUnfollow']);
-    Route::get('/payment', [App\Http\Controllers\PaymentController::class, 'index'])->name('payment.index');
+    Route::get('/payment', [PaymentController::class, 'index'])->name('payment.index');
 });
 
 Route::middleware('auth')->group(function () {
@@ -31,6 +33,7 @@ Route::middleware('auth')->group(function () {
 
 Route::get('/@{user:username}', [App\Http\Controllers\PublicProfileController::class, 'show'])->name('profile.show');
 Route::get('/@{username}/{post:slug}',[PostController::class, 'show'])->name('post.show');
+Route::post('/clap/{post}', [ClapController::class, 'clap'])->name('post.clap');
 
 Route::get('/google/auth/redirect', function () {
     return Socialite::driver('google')

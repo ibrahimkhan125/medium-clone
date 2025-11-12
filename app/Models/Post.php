@@ -21,7 +21,7 @@ class Post extends Model
         'user_id',
         'published_at',
     ];
-    public function User(): BelongsTo  
+    public function User(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
@@ -41,5 +41,9 @@ class Post extends Model
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
+    }
+    public function claps()
+    {
+        return $this->hasMany(Clap::class);
     }
 }

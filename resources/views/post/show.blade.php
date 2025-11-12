@@ -1,5 +1,14 @@
 <x-app-layout>
-    <div class="py-6">
+    <div class="py-6"
+        x-data="followersTracker
+        (
+            {{ Auth::id() }},
+            {{ $post->user->followers->count() }},
+            {{ $post->user->isFollowedBy(Auth::user()) ? 'true' : 'false' }},
+            {{ $post->claps->count() }},
+            {{ $post->id }}
+        )"
+    >
         <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-8">
                 <!-- Post Title -->
@@ -16,16 +25,12 @@
                                         href="{{ route('profile.show', $post->user) }}">{{ $post->user->name }}</a>
                                 </span>
                                 &middot;&nbsp;
-                                <div
-                                    x-data="followersTracker(
-                                        {{ $post->user->id }},
-                                        {{ $post->user->followers->count() }},
-                                        {{ $post->user->isFollowedBy(Auth::user()) ? 'true' : 'false' }})"
-                                >
+                                <div>
                                     <a
                                         class="cursor-pointer"
                                         :class="following ? 'text-red-500 hover:text-red-700' : 'text-green-500 hover:text-green-700' "
-                                        x-text="following ? 'Unfollow' : 'Follow' " @click="follow()"
+                                        x-text="following ? 'Unfollow' : 'Follow' "
+                                        @click="follow()"
                                         >
                                     </a>
                                 </div>
@@ -38,7 +43,7 @@
                     </div>
                 </div>
                 <!-- clap section -->
-                <x-clap-button />
+                <x-clap-button :post="$post" />
                 <!-- Post Image -->
                 <div class="mt-10">
                     <img src="{{$post->imageUrl()}}" alt="{{ $post->title }}" class="w-full h-auto rounded">
@@ -52,7 +57,7 @@
                     <span class="bg-gray-300 rounded-2xl px-4 py-2">{{$post->category->name}}</span>
                 </div>
                 <!-- clap section -->
-                <x-clap-button />
+                <x-clap-button  :post="$post" />
             </div>
         </div>
     </div>
