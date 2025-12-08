@@ -22,7 +22,7 @@ class CategoryList extends Component
      */
     public function render(): View|Closure|string
     {
-        $categories = Category::select('name')->get();
+        $categories = Category::get();
         return view('components.category-list', [
             'categories' => $categories
         ]);

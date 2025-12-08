@@ -17,13 +17,17 @@ use App\Models\User;
 
 Route::middleware(['auth', 'verified', CheckSuspended::class])->group(function () {
     Route::controller(PostController::class)->group(function () {
-        Route::get('/','index')->name('dashboard');
         Route::get('/post/create','create')->name('post.create');
         Route::post('/post/store','store')->name('post.store');
+        Route::get('/post/edit/{post}','edit')->name('post.edit');
+        Route::put('/post/update/{post}','update')->name('post.update');
+        Route::delete('/post/delete/{post}','destroy')->name('post.delete');
     });
     Route::post('/follow/{user}',[FollowerController::class, 'followUnfollow']);
     Route::get('/payment', [PaymentController::class, 'index'])->name('payment.index');
+    Route::get('/my-posts', [PostController::class, 'myPosts'])->name('myPosts' );
 });
+Route::get('/category/{category}', [PostController::class, 'postsByCategory'])->name('posts.byCategory');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -31,6 +35,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+Route::get('/',[PostController::class, 'index'])->name('dashboard');
 Route::get('/@{user:username}', [App\Http\Controllers\PublicProfileController::class, 'show'])->name('profile.show');
 Route::get('/@{username}/{post:slug}',[PostController::class, 'show'])->name('post.show');
 Route::post('/clap/{post}', [ClapController::class, 'clap'])->name('post.clap');

@@ -13,7 +13,8 @@ class PublicProfileController extends Controller
         // For example:
         // $user = User::where('username', $username)->firstOrFail();
         // return view('public_profile', compact('user'));
-        $posts = $user->posts()->latest()->paginate();
+        $posts = $user->posts()
+                    ->where('published_at', '<=', now())->latest()->paginate();
         return view('profile.show', ['user' => $user, 'posts' => $posts]);
     }
 }

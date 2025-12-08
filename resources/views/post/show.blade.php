@@ -11,11 +11,25 @@
     >
         <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-8">
+                @if(Auth::id() == $post->user_id)
+                    <div class="flex justify-end mb-6">
+                        <x-primary-button href="{{ route('post.edit', $post) }}">
+                            Edit Post
+                        </x-primary-button>
+                        <form method="POST" action="{{ route('post.delete', $post) }}">
+                            @csrf
+                            @method('DELETE')
+                            <x-danger-button class="ms-4">
+                                Delete Post
+                            </x-danger-button>
+                        </form>
+                    </div>
+                @endif
                 <!-- Post Title -->
                 <h4 class="text-3xl font-bold">{{ $post->title }}</h4>
                 <!-- Author Info -->
                 <div class="mt-6 flex gap-4">
-                    <img src="{{$post->user->imageUrl()}}" alt="{{$post->user->name}}"
+                    <img src="{{$post->user->imageUrl('')}}" alt="{{$post->user->name}}"
                         class="w-12 h-12 rounded-full inline-block">
                     <div>
                         <div class="flex">
@@ -24,16 +38,18 @@
                                     <a class="hover:underline"
                                         href="{{ route('profile.show', $post->user) }}">{{ $post->user->name }}</a>
                                 </span>
-                                &middot;&nbsp;
-                                <div>
-                                    <a
-                                        class="cursor-pointer"
-                                        :class="following ? 'text-red-500 hover:text-red-700' : 'text-green-500 hover:text-green-700' "
-                                        x-text="following ? 'Unfollow' : 'Follow' "
-                                        @click="follow()"
-                                        >
-                                    </a>
-                                </div>
+                                @Auth
+                                    &middot;&nbsp;
+                                    <div>
+                                        <a
+                                            class="cursor-pointer"
+                                            :class="following ? 'text-red-500 hover:text-red-700' : 'text-green-500 hover:text-green-700' "
+                                            x-text="following ? 'Unfollow' : 'Follow' "
+                                            @click="follow()"
+                                            >
+                                        </a>
+                                    </div>
+                                @endauth
                             </p>
                         </div>
                         <p class="text-gray-500 text-sm">
@@ -46,7 +62,7 @@
                 <x-clap-button :post="$post" />
                 <!-- Post Image -->
                 <div class="mt-10">
-                    <img src="{{$post->imageUrl()}}" alt="{{ $post->title }}" class="w-full h-auto rounded">
+                    <img src="{{$post->imageUrl('large')}}" alt="{{ $post->title }}" class="w-full h-auto rounded">
                 </div>
                 <!-- Post Content -->
                 <div class="mt-10">
